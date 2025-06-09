@@ -81,8 +81,21 @@ document.addEventListener("DOMContentLoaded", () => {
 		const title = document.createElement("h3");
 		title.textContent = pokemon.name;
 
+		const typesDiv = document.createElement("div");
+		typesDiv.className = "pokemon-types";
+		typesDiv.innerHTML = pokemon.types
+			.map(
+				(type) => `
+            <span class="type-badge" style="background-color: ${type.color}">
+                ${type.name}
+            </span>    
+        `,
+			)
+			.join("");
+
 		card.appendChild(img);
 		card.appendChild(title);
+		card.appendChild(typesDiv);
 
 		return card;
 	}

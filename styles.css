@@ -211,3 +211,18 @@ body {
     margin-bottom: 0.5rem;
     color: var(--text-color);
 }
+
+.pokemon-types {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.type-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    color: white;
+    background: var(--primary-color);
+}
