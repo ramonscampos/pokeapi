@@ -1,0 +1,125 @@
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #45a049;
+    --text-color: #333;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --modal-bg: rgba(255, 255, 255, 0.95);
+    --bg-color:  #92d195;
+    --header-bg: rgba(255,255,255,0.7);
+    --header-border: rgba(200,200,200,0.25);
+    --dropdown-bg: rgba(255,255,255,0.95);
+    --dropdown-border: #e0e0e0;
+    --dropdown-hover: #f5f5f5;
+    --input-bg: white;
+    --input-shadow: rgba(0, 0, 0, 0.1);
+    --modal-shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    min-height: 100dvh;
+    color: var(--text-color);
+}
+
+.background-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-image: url('data:image/svg+xml;utf8,<svg width="120" height="104" viewBox="0 0 120 104" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 15 -10, 30 10 T 60 10 T 90 10 T 120 10" stroke="%2340a060" stroke-width="2" fill="none"/><path d="M0 26 Q 15 6, 30 26 T 60 26 T 90 26 T 120 26" stroke="%2340a060" stroke-width="2" fill="none"/><path d="M0 42 Q 15 22, 30 42 T 60 42 T 90 42 T 120 42" stroke="%2340a060" stroke-width="2" fill="none"/></svg>');
+    filter: blur(5px);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.main-header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+    backdrop-filter: blur(12px);
+    background: var(--header-bg);
+    border-radius: 24px;
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    position: relative;
+}
+
+.logo {
+    width: 180px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+}
+
+#searchInput {
+    padding: 0.8rem 2.5rem 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 1rem;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    box-shadow: 0 2px 5px var(--input-shadow);
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#clearSearch {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    transition: color 0.2s;
+    display: none;
+}
+
+#clearSearch:hover {
+    color: #d32f2f;
+}

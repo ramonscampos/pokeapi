@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <title>Pokédex Interativa</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="background-blur"></div>
+    <div class="container">
+        <header class="main-header">
+            <div class="header-content">
+                <img src="https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png"
+                    alt="PokéAPI Logo" class="logo">
+            </div>
+        </header>
+
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <input type="text" id="searchInput" placeholder="Buscar Pokémon...">
+                <button id="clearSearch" title="Limpar busca" tabindex="-1">✕</button>
+            </div>
+        </div>
+
+        <main>
+            <div class="pokemon-grid" id="pokemonGrid">
+
+            </div>
+        </main>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+</body>
+
+</html>
