@@ -9,6 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		loadingOverlay?.classList.remove("visible");
 	}
 
+	function getTypeColors(type) {
+		return (
+			getComputedStyle(document.documentElement)
+				.getPropertyValue(`--type-color-${type}`)
+				.trim() || "#888"
+		);
+	}
+
 	async function fetchPokemonDetails(url) {
 		try {
 			const id = url.split("/").filter(Boolean).pop();
@@ -26,9 +34,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			const pokemon = await response.json();
 
+			const types = await Promise.all(
+				pokemon.types.map(async (type) => {
+					const typeRes = await fetch(type.type.url);
+					const typeData = await typeRes.json();
+
+					return {
+						name: typeData.name,
+						color: getTypeColors(type.type.name),
+					};
+				}),
+			);
+
 			return {
 				id,
 				...pokemon,
+				types,
 			};
 		} catch {}
 	}
@@ -47,7 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			const data = await response.json();
 
-			console.log(await fetchPokemonDetails(data.results[0].url));
+			console.log(
+				"POKEMON DETAILS => ",
+				await fetchPokemonDetails(data.results[0].url),
+			);
 		} catch {
 		} finally {
 			hideLoading();

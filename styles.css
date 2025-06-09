@@ -13,6 +13,24 @@
     --input-bg: white;
     --input-shadow: rgba(0, 0, 0, 0.1);
     --modal-shadow: rgba(0, 0, 0, 0.1);
+    --type-color-normal: #A8A878;
+    --type-color-fire: #F08030;
+    --type-color-water: #6890F0;
+    --type-color-electric: #F8D030;
+    --type-color-grass: #78C850;
+    --type-color-ice: #98D8D8;
+    --type-color-fighting: #C03028;
+    --type-color-poison: #A040A0;
+    --type-color-ground: #E0C068;
+    --type-color-flying: #A890F0;
+    --type-color-psychic: #F85888;
+    --type-color-bug: #A8B820;
+    --type-color-rock: #B8A038;
+    --type-color-ghost: #705898;
+    --type-color-dragon: #7038F8;
+    --type-color-dark: #705848;
+    --type-color-steel: #B8B8D0;
+    --type-color-fairy: #EE99AC;
 }
 
 * {
