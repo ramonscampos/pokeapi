@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+	const pokemonGrid = document.getElementById("pokemonGrid");
 	const loadingOverlay = document.getElementById("loadingOverlay");
+
+	let allPokemons = [];
 
 	function showLoading() {
 		loadingOverlay?.classList.add("visible");
@@ -51,7 +54,49 @@ document.addEventListener("DOMContentLoaded", () => {
 				...pokemon,
 				types,
 			};
-		} catch {}
+		} catch (err) {
+			console.error("Erro ao buiscar detalhes do Pokémon:", err);
+			return null;
+		}
+	}
+
+	function getPokemonImage(pokemon) {
+		const officialArt =
+			pokemon.sprites.other["official-artwork"]?.front_default;
+		const defaultSprite = pokemon.sprites?.front_default;
+
+		return officialArt || defaultSprite;
+	}
+
+	function createPokemonCard(pokemon) {
+		const card = document.createElement("div");
+		card.className = "pokemon-card";
+		card.dataset.id = pokemon.id;
+
+		const img = document.createElement("img");
+		img.loading = "lazy";
+		img.alt = pokemon.name;
+		img.src = getPokemonImage(pokemon);
+
+		const title = document.createElement("h3");
+		title.textContent = pokemon.name;
+
+		card.appendChild(img);
+		card.appendChild(title);
+
+		return card;
+	}
+
+	function renderPokemonGrid(pokemons) {
+		pokemonGrid.innerHTML = "";
+		const fragment = document.createDocumentFragment();
+
+		for (const pokemon of pokemons) {
+			const card = createPokemonCard(pokemon);
+			fragment.appendChild(card);
+		}
+
+		pokemonGrid.appendChild(fragment);
 	}
 
 	async function fetchPokemons() {
@@ -68,11 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			const data = await response.json();
 
-			console.log(
-				"POKEMON DETAILS => ",
-				await fetchPokemonDetails(data.results[0].url),
+			const pokemonDetails = await Promise.all(
+				data.results.map(async (pokemon) => {
+					const details = await fetchPokemonDetails(pokemon.url);
+					return details;
+				}),
 			);
-		} catch {
+
+			allPokemons = pokemonDetails.filter(Boolean);
+			renderPokemonGrid(allPokemons);
+		} catch (err) {
+			console.error("Erro ao buscar Pokémon:", err);
 		} finally {
 			hideLoading();
 		}
