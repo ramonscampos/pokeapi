@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	const closeButton = document.querySelector(".close-button");
 	const loadingOverlay = document.getElementById("loadingOverlay");
 
+	const themeToggle = document.getElementById("themeToggle");
+	const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
 	let allPokemons = [];
 
 	function showLoading() {
@@ -258,6 +261,29 @@ document.addEventListener("DOMContentLoaded", () => {
 			setTimeout(() => {
 				modal.style.display = "none";
 			}, 10);
+		}
+	});
+
+	document.documentElement.setAttribute(
+		"data-theme",
+		localStorage.getItem("theme") ||
+			(prefersDarkScheme.matches ? "dark" : "light"),
+	);
+
+	themeToggle.addEventListener("click", () => {
+		const currentTheme = document.documentElement.getAttribute("data-theme");
+		const newTheme = currentTheme === "light" ? "dark" : "light";
+
+		document.documentElement.setAttribute("data-theme", newTheme);
+		localStorage.setItem("theme", newTheme);
+	});
+
+	prefersDarkScheme.addEventListener("change", () => {
+		if (!localStorage.getItem("theme")) {
+			document.documentElement.setAttribute(
+				"data-theme",
+				prefersDarkScheme.matches ? "dark" : "light",
+			);
 		}
 	});
 
