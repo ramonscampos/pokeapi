@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const pokemonGrid = document.getElementById("pokemonGrid");
 	const header = document.querySelector(".main-header");
+	const searchInput = document.getElementById("searchInput");
+	const clearSearch = document.getElementById("clearSearch");
 	const loadingOverlay = document.getElementById("loadingOverlay");
 
 	let allPokemons = [];
@@ -151,6 +153,38 @@ document.addEventListener("DOMContentLoaded", () => {
 			header.style.borderTopLeftRadius = "24px";
 			header.style.borderTopRightRadius = "24px";
 		}
+	});
+
+	searchInput.addEventListener("input", (e) => {
+		const searchTerm = e.target.value.toLowerCase().trim();
+
+		if (searchTerm !== "") {
+			clearSearch.style.display = "flex";
+			const filteredPokemons = allPokemons.filter((pokemon) => {
+				if (!pokemon) return false;
+				return pokemon.name.toLowerCase().includes(searchTerm);
+			});
+
+			pokemonGrid.innerHTML = "";
+			if (filteredPokemons.length === 0) {
+				pokemonGrid.innerHTML = `
+                    <div class="no-results">
+                        <p>Nenhum Pokémon encontrado para "${e.target.value}"</p>
+                    </div>
+                `;
+			} else {
+				renderPokemonGrid(filteredPokemons);
+			}
+		} else {
+			clearSearch.style.display = "none";
+			renderPokemonGrid(allPokemons);
+		}
+	});
+
+	clearSearch.addEventListener("click", () => {
+		searchInput.value = "";
+		clearSearch.style.display = "none";
+		renderPokemonGrid(allPokemons);
 	});
 
 	fetchPokemons();

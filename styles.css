@@ -225,7 +225,21 @@ body {
     background: var(--primary-color);
 }
 
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255,255,255,0.9);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+}
 
+.no-results p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0;
+}
 
 /* ANIMATIONS */
 @keyframes spin {
