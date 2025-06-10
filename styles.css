@@ -3,7 +3,7 @@
     --secondary-color: #45a049;
     --text-color: #333;
     --card-bg: rgba(255, 255, 255, 0.9);
-    --modal-bg: rgba(255, 255, 255, 0.85);
+    --modal-bg: rgba(255, 255, 255, 0.95);
     --bg-color:  #92d195;
     --header-bg: rgba(255,255,255,0.7);
     --header-border: rgba(200,200,200,0.25);
@@ -268,6 +268,73 @@ body {
     width: 90%;
     position: relative;
     backdrop-filter: blur(3px);
+    transform: scale(0.7);
+    transition: transform 0.3 ease;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.modal-body {
+    margin-top: 1rem;
+}
+
+.modal-body img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+    animation: pulse 2s infinite;
+}
+
+.modal-body h2 {
+    text-align: center;
+    text-transform: capitalize;
+    margin: 1rem 0;
+    animation: slideFromTop 0.5s ease-out;
+}
+
+.pokemon-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.detail-item {
+    background: rgba(76, 175, 80, 0.1);
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.detail-item:hover {
+    animation: bounce 0.5s ease;
+}
+
+.detail-item strong {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--primary-color);
 }
 
 /* ANIMATIONS */
@@ -279,4 +346,30 @@ body {
 @keyframes fadeIn {
     from { opacity: 0 }
     to { opacity: 1 }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1) }
+    50% { transform: scale(1.05) }
+    100% { transform: scale(1) }
+}
+
+@keyframes slideFromTop {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }

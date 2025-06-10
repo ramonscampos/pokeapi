@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const clearSearch = document.getElementById("clearSearch");
 	const modalBody = document.querySelector(".modal-body");
 	const modal = document.getElementById("pokemonModal");
+	const closeButton = document.querySelector(".close-button");
 	const loadingOverlay = document.getElementById("loadingOverlay");
 
 	let allPokemons = [];
@@ -83,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	function showPokemonDetails(pokemon) {
-		console.log(pokemon);
 		modalBody.innerHTML = `
             <img src="${getPokemonImage(pokemon)}" alt="${pokemon.name}">
             <h2>${pokemon.name}</h2>
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="detail-item">
                     <strong>Weight</strong>
-                    ${(pokemon.weight / 10).toFixed(1)}m
+                    ${(pokemon.weight / 10).toFixed(1)}kg
                 </div>
                 <div class="detail-item">
                     <strong>Types</strong>
@@ -243,6 +243,22 @@ document.addEventListener("DOMContentLoaded", () => {
 		searchInput.value = "";
 		clearSearch.style.display = "none";
 		renderPokemonGrid(allPokemons);
+	});
+
+	closeButton.addEventListener("click", () => {
+		modal.classList.remove("active");
+		setTimeout(() => {
+			modal.style.display = "none";
+		}, 10);
+	});
+
+	modal.addEventListener("click", (e) => {
+		if (e.target === modal) {
+			modal.classList.remove("active");
+			setTimeout(() => {
+				modal.style.display = "none";
+			}, 10);
+		}
 	});
 
 	fetchPokemons();
