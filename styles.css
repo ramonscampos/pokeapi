@@ -76,6 +76,7 @@ body {
     background: var(--header-bg);
     border-radius: 24px;
     margin-bottom: 2rem;
+    transition: all 0.2s ease-in-out;
 }
 
 .header-content {
@@ -173,11 +174,6 @@ body {
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg) }
-    100% { transform: rotate(360deg) }
-}
-
 .pokemon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -192,6 +188,8 @@ body {
     text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 6px var(--input-shadow);
+    animation: fadeIn 0.5s ease-out;
+    transition: all 0.3s ease;
 }
 
 .pokemon-card img {
@@ -225,4 +223,17 @@ body {
     text-transform: capitalize;
     color: white;
     background: var(--primary-color);
+}
+
+
+
+/* ANIMATIONS */
+@keyframes spin {
+    0% { transform: rotate(0deg) }
+    100% { transform: rotate(360deg) }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
 }

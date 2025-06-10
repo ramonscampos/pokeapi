@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const pokemonGrid = document.getElementById("pokemonGrid");
+	const header = document.querySelector(".main-header");
 	const loadingOverlay = document.getElementById("loadingOverlay");
 
 	let allPokemons = [];
@@ -141,6 +142,16 @@ document.addEventListener("DOMContentLoaded", () => {
 			hideLoading();
 		}
 	}
+
+	window.addEventListener("scroll", () => {
+		if (window.scrollY > 32) {
+			header.style.borderTopLeftRadius = "0";
+			header.style.borderTopRightRadius = "0";
+		} else {
+			header.style.borderTopLeftRadius = "24px";
+			header.style.borderTopRightRadius = "24px";
+		}
+	});
 
 	fetchPokemons();
 });
