@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const header = document.querySelector(".main-header");
 	const searchInput = document.getElementById("searchInput");
 	const clearSearch = document.getElementById("clearSearch");
+	const modalBody = document.querySelector(".modal-body");
+	const modal = document.getElementById("pokemonModal");
 	const loadingOverlay = document.getElementById("loadingOverlay");
 
 	let allPokemons = [];
@@ -52,10 +54,19 @@ document.addEventListener("DOMContentLoaded", () => {
 				}),
 			);
 
+			const abilities = await Promise.all(
+				pokemon.abilities.map(async (ability) => {
+					const abilityRes = await fetch(ability.ability.url);
+					const abilityData = await abilityRes.json();
+					return abilityData.name;
+				}),
+			);
+
 			return {
 				id,
 				...pokemon,
 				types,
+				abilities,
 			};
 		} catch (err) {
 			console.error("Erro ao buiscar detalhes do Pokémon:", err);
@@ -69,6 +80,51 @@ document.addEventListener("DOMContentLoaded", () => {
 		const defaultSprite = pokemon.sprites?.front_default;
 
 		return officialArt || defaultSprite;
+	}
+
+	function showPokemonDetails(pokemon) {
+		console.log(pokemon);
+		modalBody.innerHTML = `
+            <img src="${getPokemonImage(pokemon)}" alt="${pokemon.name}">
+            <h2>${pokemon.name}</h2>
+            <div class="pokemon-details">
+                <div class="detail-item">
+                    <strong>Height</strong>
+                    ${(pokemon.height / 10).toFixed(1)}m
+                </div>
+                <div class="detail-item">
+                    <strong>Weight</strong>
+                    ${(pokemon.weight / 10).toFixed(1)}m
+                </div>
+                <div class="detail-item">
+                    <strong>Types</strong>
+                    ${pokemon.types.map((type) => type.name).join(", ")}
+                </div>
+                <div class="detail-item">
+                    <strong>Abilities</strong>
+                    ${pokemon.abilities.join(", ")}
+                </div>
+                <div class="detail-item">
+                    <strong>HP</strong>
+                    ${pokemon.stats[0].base_stat}
+                </div>
+                <div class="detail-item">
+                    <strong>Attack</strong>
+                    ${pokemon.stats[1].base_stat}
+                </div>
+                <div class="detail-item">
+                    <strong>Defense</strong>
+                    ${pokemon.stats[2].base_stat}
+                </div>
+                <div class="detail-item">
+                    <strong>Speed</strong>
+                    ${pokemon.stats[5].base_stat}
+                </div>
+            </div>
+        `;
+
+		modal.style.display = "flex";
+		setTimeout(() => modal.classList.add("active"), 10);
 	}
 
 	function createPokemonCard(pokemon) {
@@ -99,6 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		card.appendChild(img);
 		card.appendChild(title);
 		card.appendChild(typesDiv);
+
+		card.addEventListener("click", () => showPokemonDetails(pokemon));
 
 		return card;
 	}
