@@ -11,7 +11,43 @@ document.addEventListener("DOMContentLoaded", () => {
 	const themeToggle = document.getElementById("themeToggle");
 	const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
+	const dropdown = document.querySelector(".dropdown-language");
+	const dropdownToggle = document.getElementById("selectedLang");
+	const dropdownItems = document.querySelectorAll(".dropdown-item");
+
 	let allPokemons = [];
+	let currentLang = "en";
+
+	const translations = {
+		es: {
+			search: "Buscar Pokémon...",
+			height: "Altura",
+			weight: "Peso",
+			types: "Tipos",
+			abilities: "Habilidades",
+			category: "Categoria",
+			stats: {
+				hp: "HP",
+				attack: "Ataque",
+				defense: "Defensa",
+				speed: "Velocidad",
+			},
+		},
+		en: {
+			search: "Search Pokémon...",
+			height: "Height",
+			weight: "Weight",
+			types: "Types",
+			abilities: "Abilities",
+			category: "Category",
+			stats: {
+				hp: "HP",
+				attack: "Attack",
+				defense: "Defense",
+				speed: "Speed",
+			},
+		},
+	};
 
 	function showLoading() {
 		loadingOverlay?.classList.add("visible");
@@ -38,21 +74,47 @@ document.addEventListener("DOMContentLoaded", () => {
 				return null;
 			}
 
-			const response = await fetch(url);
-			if (!response.ok) {
+			const [pokemonRes, speciesRes] = await Promise.all([
+				fetch(url),
+				fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`),
+			]);
+
+			if (!pokemonRes.ok || !speciesRes.ok) {
 				console.error("Erro ao buscar dados da API para o Pokémon ID: ", id);
 				return null;
 			}
 
-			const pokemon = await response.json();
+			const pokemon = await pokemonRes.json();
+			const species = await speciesRes.json();
+
+			const nameObj = species.names.find(
+				(specie) => specie.language.name === currentLang,
+			);
+			const translatedName = nameObj ? nameObj.name : pokemon.name;
+
+			const flavorObj = species.flavor_text_entries.find(
+				(f) => f.language.name === currentLang,
+			);
+
+			const description = flavorObj
+				? flavorObj.flavor_text.replace(/\f|\n/g, " ")
+				: "";
+
+			const genusObj = species.genera.find(
+				(g) => g.language.name === currentLang,
+			);
+			const category = genusObj ? genusObj.genus : "";
 
 			const types = await Promise.all(
 				pokemon.types.map(async (type) => {
 					const typeRes = await fetch(type.type.url);
 					const typeData = await typeRes.json();
+					const typeNameObj = typeData.names.find(
+						(type) => type.language.name === currentLang,
+					);
 
 					return {
-						name: typeData.name,
+						name: typeNameObj ? typeNameObj.name : typeData.name,
 						color: getTypeColors(type.type.name),
 					};
 				}),
@@ -62,13 +124,19 @@ document.addEventListener("DOMContentLoaded", () => {
 				pokemon.abilities.map(async (ability) => {
 					const abilityRes = await fetch(ability.ability.url);
 					const abilityData = await abilityRes.json();
-					return abilityData.name;
+					const abilityNameObj = abilityData.names.find(
+						(ability) => ability.language.name === currentLang,
+					);
+					return abilityNameObj ? abilityNameObj.name : abilityData.name;
 				}),
 			);
 
 			return {
 				id,
 				...pokemon,
+				translatedName,
+				description,
+				category,
 				types,
 				abilities,
 			};
@@ -88,42 +156,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function showPokemonDetails(pokemon) {
 		modalBody.innerHTML = `
-            <img src="${getPokemonImage(pokemon)}" alt="${pokemon.name}">
-            <h2>${pokemon.name}</h2>
+            <img src="${getPokemonImage(pokemon)}" alt="${pokemon.translatedName || pokemon.name}">
+            <h2>${pokemon.translatedName || pokemon.name}</h2>
             <div class="pokemon-details">
                 <div class="detail-item">
-                    <strong>Height</strong>
+                    <strong>${translations[currentLang].height}</strong>
                     ${(pokemon.height / 10).toFixed(1)}m
                 </div>
                 <div class="detail-item">
-                    <strong>Weight</strong>
+                    <strong>${translations[currentLang].weight}</strong>
                     ${(pokemon.weight / 10).toFixed(1)}kg
                 </div>
                 <div class="detail-item">
-                    <strong>Types</strong>
+                    <strong>${translations[currentLang].types}</strong>
                     ${pokemon.types.map((type) => type.name).join(", ")}
                 </div>
                 <div class="detail-item">
-                    <strong>Abilities</strong>
+                    <strong>${translations[currentLang].abilities}</strong>
                     ${pokemon.abilities.join(", ")}
                 </div>
                 <div class="detail-item">
-                    <strong>HP</strong>
+                    <strong>${translations[currentLang].stats.hp}</strong>
                     ${pokemon.stats[0].base_stat}
                 </div>
                 <div class="detail-item">
-                    <strong>Attack</strong>
+                    <strong>${translations[currentLang].stats.attack}</strong>
                     ${pokemon.stats[1].base_stat}
                 </div>
                 <div class="detail-item">
-                    <strong>Defense</strong>
+                    <strong>${translations[currentLang].stats.defense}</strong>
                     ${pokemon.stats[2].base_stat}
                 </div>
                 <div class="detail-item">
-                    <strong>Speed</strong>
+                    <strong>${translations[currentLang].stats.speed}</strong>
                     ${pokemon.stats[5].base_stat}
                 </div>
             </div>
+            ${pokemon.description ? `<p>${pokemon.description}</p>` : ""}
+            ${pokemon.category ? `<p>${translations[currentLang].category}: ${pokemon.category}</p>` : ""}
         `;
 
 		modal.style.display = "flex";
@@ -137,11 +207,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		const img = document.createElement("img");
 		img.loading = "lazy";
-		img.alt = pokemon.name;
+		img.alt = pokemon.translatedName || pokemon.name;
 		img.src = getPokemonImage(pokemon);
 
 		const title = document.createElement("h3");
-		title.textContent = pokemon.name;
+		title.textContent = pokemon.translatedName || pokemon.name;
 
 		const typesDiv = document.createElement("div");
 		typesDiv.className = "pokemon-types";
@@ -223,7 +293,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			clearSearch.style.display = "flex";
 			const filteredPokemons = allPokemons.filter((pokemon) => {
 				if (!pokemon) return false;
-				return pokemon.name.toLowerCase().includes(searchTerm);
+				const pokemonName = (
+					pokemon.translatedName || pokemon.name
+				).toLowerCase();
+
+				return pokemonName.includes(searchTerm);
 			});
 
 			pokemonGrid.innerHTML = "";
@@ -287,5 +361,77 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+	document.documentElement.lang = currentLang;
+
+	let activeLangButton = null;
+
+	for (const item of dropdownItems) {
+		if (item.dataset.lang === currentLang) {
+			activeLangButton = item;
+			break;
+		}
+	}
+
+	if (activeLangButton) {
+		activeLangButton.classList.add("active");
+		dropdownToggle.innerHTML = activeLangButton.innerHTML;
+	}
+
+	dropdownToggle.addEventListener("click", () => {
+		dropdown.classList.toggle("open");
+	});
+
+	window.addEventListener("click", (e) => {
+		if (dropdown.classList.contains("open")) {
+			if (!dropdown.contains(e.target)) {
+				dropdown.classList.remove("open");
+			}
+		}
+	});
+
 	fetchPokemons();
+
+	for (const button of dropdownItems) {
+		button.addEventListener("click", () => {
+			const newLang = button.dataset.lang;
+			if (newLang === currentLang) return;
+
+			currentLang = newLang;
+			searchInput.placeholder = translations[currentLang].search;
+
+			for (const item of dropdownItems) {
+				item.classList.remove("active");
+			}
+			button.classList.add("active");
+			dropdownToggle.innerHTML = button.innerHTML;
+			dropdown.classList.remove("open");
+
+			fetchPokemons();
+
+			for (pokemon of allPokemons) {
+				const card = pokemonGrid.querySelector(
+					`.pokemon-card[data-id="${pokemon.id}"]`,
+				);
+
+				if (card) {
+					card.querySelector("img").alt =
+						pokemon.translatedName || pokemon.name;
+					card.querySelector("h3").textContent =
+						pokemon.translatedName || pokemon.name;
+
+					const typesDiv = card.querySelector(".pokemon-types");
+
+					typesDiv.innerHTML = pokemon.types
+						.map(
+							(type) => `
+                        <span class="type-badge" style="background-color: ${type.color}">
+                            ${type.name}
+                        </span>    
+                    `,
+						)
+						.join("");
+				}
+			}
+		});
+	}
 });

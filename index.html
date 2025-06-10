@@ -23,6 +23,17 @@
                     alt="PokéAPI Logo" class="logo">
 
                 <div class="header-actions">
+                    <div class="dropdown-language">
+                        <button class="dropdown-toggle" id="selectedLang">
+                            🇺🇸 English
+                        </button>
+
+                        <div class="dropdown-menu" id="langMenu">
+                            <button class="dropdown-item" data-lang="es">🇪🇸 Español</button>
+                            <button class="dropdown-item" data-lang="en">🇺🇸 English</button>
+                        </div>
+                    </div>
+
                     <button class="theme-toggle" id="themeToggle" title="Alternar tema">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -43,8 +54,8 @@
 
         <div class="search-container">
             <div class="search-input-wrapper">
-                <input type="text" id="searchInput" placeholder="Buscar Pokémon...">
-                <button id="clearSearch" title="Limpar busca" tabindex="-1">&times;</button>
+                <input type="text" id="searchInput" placeholder="Search Pokémon...">
+                <button id="clearSearch" title="Clear search" tabindex="-1">&times;</button>
             </div>
         </div>
 

@@ -328,6 +328,23 @@ body {
     animation: slideFromTop 0.5s ease-out;
 }
 
+.modal-body p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.modal-body p:first-of-type {
+    margin-top: 2rem;
+}
+
+.modal-body p:last-of-type {
+    font-weight: 600;
+    margin-top: 0.8rem;
+}
+
 .pokemon-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -388,6 +405,74 @@ body {
 
 .theme-toggle:hover svg {
     transform: rotate(30deg);
+}
+
+.dropdown-language {
+    position: relative;
+    display: flex;
+    align-items: center
+}
+
+.dropdown-toggle {
+    background: var(--dropdown-bg);
+    border: 1.5px solid var(--dropdown-border);
+    border-radius: 16px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px var(--input-shadow);
+}
+
+.dropdown-toggle:after {
+    content: '▼';
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    color: #888;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: var(--dropdown-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px var(--input-shadow);
+    min-width: 160px;
+    padding: 0.5rem 0;
+    flex-direction: column;
+    gap: 0.2rem;
+    border: 1.5px solid var(--dropdown-border);
+    z-index: 100;
+}
+
+.dropdown-language.open .dropdown-menu {
+    display: flex;
+}
+
+.dropdown-item {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover, .dropdown-item.active {
+    background: var(--dropdown-hover);
+    color: var(--primary-color);
 }
 
 /* ANIMATIONS */
