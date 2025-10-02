@@ -407,31 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			dropdown.classList.remove("open");
 
 			fetchPokemons();
-
-			for (pokemon of allPokemons) {
-				const card = pokemonGrid.querySelector(
-					`.pokemon-card[data-id="${pokemon.id}"]`,
-				);
-
-				if (card) {
-					card.querySelector("img").alt =
-						pokemon.translatedName || pokemon.name;
-					card.querySelector("h3").textContent =
-						pokemon.translatedName || pokemon.name;
-
-					const typesDiv = card.querySelector(".pokemon-types");
-
-					typesDiv.innerHTML = pokemon.types
-						.map(
-							(type) => `
-                        <span class="type-badge" style="background-color: ${type.color}">
-                            ${type.name}
-                        </span>    
-                    `,
-						)
-						.join("");
-				}
-			}
 		});
 	}
 });
